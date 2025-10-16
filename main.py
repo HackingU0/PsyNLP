@@ -5,7 +5,15 @@ from predict_nlp import load_models, predict_sentences, to_dataframe
 MODEL_BERT_PATH = "nlp_models/model_bert"
 MODEL_SBERT_PATH = "nlp_models/model_sbert"
 MODEL_EMOTION_PATH = "nlp_models/bert-emotion"
-CLASSES = ["Normal","Depression", "Anxiety", "Stress", "Bipolar", "Personality disorder", "Suicidal"]
+CLASSES = [
+    "Normal",
+    "Depression",
+    "Anxiety",
+    "Stress",
+    "Bipolar",
+    "Personality disorder",
+    "Suicidal",
+]
 sentences = process_markdown("article.md")
 
 models = load_models(MODEL_BERT_PATH)
