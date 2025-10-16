@@ -194,16 +194,6 @@ wheels = [
 ]
 
 [[package]]
-name = "docx"
-version = "0.2.4"
-source = { registry = "https://pypi.org/simple" }
-dependencies = [
-    { name = "lxml" },
-    { name = "pillow" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/4a/8e/5a01644697b03016de339ef444cfff28367f92984dc74eddaab1ed60eada/docx-0.2.4.tar.gz", hash = "sha256:9d7595eac6e86cda0b7136a2995318d039c1f3eaa368a3300805abbbe5dc8877", size = 54925, upload-time = "2014-02-06T10:02:49.394Z" }
-
-[[package]]
 name = "en-core-web-sm"
 version = "3.8.0"
 source = { url = "https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-3.8.0/en_core_web_sm-3.8.0-py3-none-any.whl" }
@@ -945,7 +935,6 @@ dependencies = [
     { name = "cloudpathlib" },
     { name = "confection" },
     { name = "cymem" },
-    { name = "docx" },
     { name = "en-core-web-sm" },
     { name = "filelock" },
     { name = "fsspec" },
@@ -973,7 +962,6 @@ dependencies = [
     { name = "preshed" },
     { name = "pydantic" },
     { name = "pydantic-core" },
-    { name = "pydocx" },
     { name = "pygments" },
     { name = "python-dateutil" },
     { name = "pytz" },
@@ -1023,7 +1011,6 @@ requires-dist = [
     { name = "cloudpathlib", specifier = "==0.23.0" },
     { name = "confection", specifier = "==0.1.5" },
     { name = "cymem", specifier = "==2.0.11" },
-    { name = "docx", specifier = "==0.2.4" },
     { name = "en-core-web-sm", url = "https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-3.8.0/en_core_web_sm-3.8.0-py3-none-any.whl" },
     { name = "filelock", specifier = "==3.20.0" },
     { name = "fsspec", specifier = "==2025.9.0" },
@@ -1051,7 +1038,6 @@ requires-dist = [
     { name = "preshed", specifier = "==3.0.10" },
     { name = "pydantic", specifier = "==2.12.2" },
     { name = "pydantic-core", specifier = "==2.41.4" },
-    { name = "pydocx", specifier = "==0.9.10" },
     { name = "pygments", specifier = "==2.19.2" },
     { name = "python-dateutil", specifier = "==2.9.0.post0" },
     { name = "pytz", specifier = "==2025.2" },
@@ -1170,12 +1156,6 @@ wheels = [
     { url = "https://files.pythonhosted.org/packages/0d/c1/dd3542d072fcc336030d66834872f0328727e3b8de289c662faa04aa270e/pydantic_core-2.41.4-graalpy312-graalpy250_312_native-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:e4dab9484ec605c3016df9ad4fd4f9a390bc5d816a3b10c6550f8424bb80b18c", size = 1951495, upload-time = "2025-10-14T10:23:02.089Z" },
     { url = "https://files.pythonhosted.org/packages/2b/c6/db8d13a1f8ab3f1eb08c88bd00fd62d44311e3456d1e85c0e59e0a0376e7/pydantic_core-2.41.4-graalpy312-graalpy250_312_native-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:bd8a5028425820731d8c6c098ab642d7b8b999758e24acae03ed38a66eca8335", size = 2139008, upload-time = "2025-10-14T10:23:04.539Z" },
 ]
-
-[[package]]
-name = "pydocx"
-version = "0.9.10"
-source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/2b/c2/015516924e2f671d18371296a62cd0a50842a24eab59844f6c474e9f12e9/PyDocX-0.9.10.tar.gz", hash = "sha256:07bd9bce7834f8a5e0b00130f29b54bbdda22d625711a591421913bdfa8470e3", size = 1156836, upload-time = "2016-07-29T20:31:36.557Z" }
 
 [[package]]
 name = "pygments"

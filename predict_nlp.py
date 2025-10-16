@@ -37,7 +37,7 @@ def predict_sentences(sentences: list[str], models: dict, classes: list[str]):
         row = {"sentence": sent}
         for name, model in models.items():
             scores = model.predict(sent).flatten()  # shape: (num_classes,)
-            # 找到最大概率对应的类别
+            # Find probability
             pred_class = classes[scores.argmax()]
             row[name + "_score"] = scores.tolist()
             row[name + "_pred"] = pred_class
