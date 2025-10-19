@@ -31,10 +31,10 @@ cd PsyNLP
 pip install -r requirements.txt
 ```
 
-3. Download required models (they should be in `nlp_models/` directory):
+3. Download required models (they should be in `nlp_models/` directory, refer to [nlp_models/readme.md]):
    - bert-emotion
    - deberta-illness
-   - GGUF models (optional, for LLM features)
+   - GGUF models
 
 ## Usage
 
