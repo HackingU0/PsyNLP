@@ -1,3 +1,7 @@
+"""
+Sentence Process module
+Process marktown files, split into different sentences
+"""
 import spacy
 from bs4 import BeautifulSoup
 import markdown
