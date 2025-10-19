@@ -16,7 +16,7 @@ PsyNLP is a web-based application that analyzes text (articles, journals, notes)
 - **Web Interface**: User-friendly Flask web application
 - **File Support**: Process `.txt`, `.md`, and `.docx` files
 
-## Installation
+## Installation (for non MacOS system)
 
 1. Clone the repository:
 
@@ -36,11 +36,19 @@ pip install -r requirements.txt
    - deberta-illness
    - GGUF models
 
+## Installation (for macOS)
+
+```bash
+chmod +x setup_mac.sh
+./setup_mac.sh
+```
+
 ## Usage
 
 1. Start the web application:
 
 ```bash
+source venv/bin/activate
 python web_app.py
 ```
 
