@@ -39,6 +39,10 @@ pip install -r requirements.txt
 ## Installation (for macOS)
 
 ```bash
+xcode-select --install
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+git clone https://github.com/HackingU0/PsyNLP.git
+cd PsyNLP
 chmod +x setup_mac.sh
 ./setup_mac.sh
 ```
