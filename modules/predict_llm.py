@@ -1,3 +1,7 @@
+"""
+LLM Prediction Module
+Generates predict for sentences using Llama-cpp-Python
+"""
 from llama_cpp import Llama
 from llama_cpp.llama_types import CreateChatCompletionResponse
 from typing import cast
