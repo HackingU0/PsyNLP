@@ -188,3 +188,4 @@ nlp_models/deberta-illness/model.safetensors
 PsyNLP.code-workspace
 uploads/*
 reports/*
+._*
