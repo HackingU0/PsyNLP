@@ -1,3 +1,6 @@
+"""
+Quantize prediction by using score generate by llms
+"""
 from modules.predict_nlp import predict_article
 from modules.predict_llm import predict_sentences_llm
 from modules.sentence_process import process_markdown
