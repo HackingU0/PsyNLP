@@ -16,13 +16,13 @@ def markdown_to_text(md_path: str) -> str:
 
 def clean_text(text: str) -> str:
     """
-    去掉多余换行、空格等，保证每句话干净
+    Remove extra line breaks, spaces, etc. and make sure each sentence is clean
     """
     import re
 
-    # 替换连续换行和空格为一个空格
+    # Replace consecutive line feeds and spaces with a single space
     text = re.sub(r"\s+", " ", text)
-    # 可选：去掉 markdown 残留符号
+    # Remove markdown residual symbols
     text = text.replace("*", "").replace("#", "")
     return text.strip()
 
