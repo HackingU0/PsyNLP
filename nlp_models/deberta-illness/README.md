@@ -1,29 +1,31 @@
+---
+tags:
+  - text-classification
+  - mental-health
+  - deberta-v3
+  - pytorch
+  - transformers
+  - sentiment-analysis
+  - healthcare
+
+language:
+  - en
+
+license: mit
+
+datasets:
+  - AIMH/SWMH
+
+metrics:
+  - accuracy
+  - f1
+
+pipeline_tag: text-classification
+---
+
 # DeBERTa Mental Health Classification Model
 
 A fine-tuned DeBERTa v3 small model for detecting mental health conditions from text.
-
----
-
-tags:
-
-- text-classification
-- mental-health
-- deberta-v3
-- pytorch
-- transformers
-- sentiment-analysis
-- healthcare
-  language:
-- en
-  license: mit
-  datasets:
-- AIMH/SWMH
-  metrics:
-- accuracy
-- f1
-  pipeline_tag: text-classification
-
----
 
 ## Model Description
 
