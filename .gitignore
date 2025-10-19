@@ -183,4 +183,8 @@ cython_debug/
 
 # My own stuff
 .DS_Store
-model.safetensors
+nlp_models/deberta-illness/model.safetensors
+*.gguf
+PsyNLP.code-workspace
+uploads/*
+reports/*

@@ -1,20 +1,2 @@
-# The Future of Artificial Intelligence
-
-Artificial Intelligence (AI) is transforming the world at an unprecedented pace. Companies are integrating AI into products and services, creating new opportunities for growth. However, the rapid adoption of AI also raises ethical and social concerns.
-
-## Applications of AI
-
-- Healthcare: AI can assist in diagnosing diseases more accurately than ever before.
-- Finance: AI algorithms help detect fraudulent transactions.
-- Transportation: Self-driving cars rely heavily on AI to navigate roads safely.
-
-AI research continues to advance, with models becoming more sophisticated every year. For example, large language models like GPT-4 can generate human-like text, answer questions, and even write code. This has profound implications for education, business, and creativity.
-
-### Challenges
-
-Despite the potential, AI faces significant challenges:
-
-1. Bias: AI systems can inherit biases from the data they are trained on.
-2. Security: Malicious actors may exploit AI models.
-3. Regulation: Governments struggle to create policies that protect people without stifling innovation.
-
+Last night I was sitting in my room after work and I couldn’t shake this weird tight feeling in my chest. Nothing was wrong no bad news, no deadlines, nobody messaging me but my brain just wouldn’t let me relax. I tried distracting myself, scrolling on grizzly's quest while I waited for the feeling to pass. But the whole time, I just felt this low-level panic sitting in the background, like I was forgetting something important. It’s so frustrating because I know there’s nothing to be stressed about, but my body doesn’t listen. My heart races, I feel restless, and then I get mad at myself for not being able to just calm down.
+Does anyone else get this “anxiety with no trigger” feeling? And if so, how do you ride it out when it happens?

@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PsyNLP - Mental Health Text Analysis</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          "Helvetica Neue", Arial, sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        padding: 20px;
+      }
+
+      .container {
+        max-width: 900px;
+        margin: 0 auto;
+        background: white;
+        border-radius: 16px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        overflow: hidden;
+      }
+
+      .header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 40px;
+        text-align: center;
+      }
+
+      .header h1 {
+        font-size: 36px;
+        margin-bottom: 10px;
+      }
+
+      .header p {
+        font-size: 16px;
+        opacity: 0.9;
+      }
+
+      .content {
+        padding: 40px;
+      }
+
+      .section {
+        margin-bottom: 30px;
+      }
+
+      .section-title {
+        font-size: 20px;
+        font-weight: bold;
+        color: #2c3e50;
+        margin-bottom: 15px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .upload-area {
+        border: 3px dashed #cbd5e0;
+        border-radius: 12px;
+        padding: 60px 20px;
+        text-align: center;
+        background: #f7fafc;
+        transition: all 0.3s;
+        cursor: pointer;
+      }
+
+      .upload-area:hover {
+        border-color: #667eea;
+        background: #edf2f7;
+      }
+
+      .upload-area.dragover {
+        border-color: #667eea;
+        background: #e6f0ff;
+        transform: scale(1.02);
+      }
+
+      .upload-icon {
+        font-size: 48px;
+        margin-bottom: 20px;
+      }
+
+      .upload-text {
+        font-size: 18px;
+        color: #4a5568;
+        margin-bottom: 10px;
+      }
+
+      .upload-subtext {
+        font-size: 14px;
+        color: #a0aec0;
+      }
+
+      .file-input {
+        display: none;
+      }
+
+      .btn {
+        padding: 12px 30px;
+        border: none;
+        border-radius: 8px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s;
+        display: inline-block;
+      }
+
+      .btn-primary {
+        background: #667eea;
+        color: white;
+      }
+
+      .btn-primary:hover {
+        background: #5568d3;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+      }
+
+      .btn-success {
+        background: #48bb78;
+        color: white;
+      }
+
+      .btn-success:hover {
+        background: #38a169;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(72, 187, 120, 0.4);
+      }
+
+      .btn:disabled {
+        background: #cbd5e0;
+        cursor: not-allowed;
+        transform: none;
+      }
+
+      .file-info {
+        background: #e6f0ff;
+        border-left: 4px solid #667eea;
+        padding: 15px;
+        border-radius: 8px;
+        display: none;
+        margin-top: 15px;
+      }
+
+      .file-info.show {
+        display: block;
+      }
+
+      .mode-selection {
+        display: flex;
+        gap: 20px;
+        margin-top: 15px;
+      }
+
+      .mode-option {
+        flex: 1;
+        padding: 20px;
+        border: 2px solid #e2e8f0;
+        border-radius: 12px;
+        cursor: pointer;
+        transition: all 0.3s;
+      }
+
+      .mode-option:hover {
+        border-color: #667eea;
+        background: #f7fafc;
+      }
+
+      .mode-option.selected {
+        border-color: #667eea;
+        background: #e6f0ff;
+      }
+
+      .mode-option input[type="radio"] {
+        display: none;
+      }
+
+      .mode-title {
+        font-size: 18px;
+        font-weight: 600;
+        color: #2c3e50;
+        margin-bottom: 8px;
+      }
+
+      .mode-desc {
+        font-size: 14px;
+        color: #718096;
+      }
+
+      .action-buttons {
+        display: flex;
+        gap: 15px;
+        margin-top: 30px;
+      }
+
+      .progress-bar {
+        width: 100%;
+        height: 8px;
+        background: #e2e8f0;
+        border-radius: 4px;
+        overflow: hidden;
+        display: none;
+        margin-top: 20px;
+      }
+
+      .progress-bar.show {
+        display: block;
+      }
+
+      .progress-fill {
+        height: 100%;
+        background: linear-gradient(90deg, #667eea, #764ba2);
+        width: 0%;
+        transition: width 0.3s;
+        animation: progress-animation 2s infinite;
+      }
+
+      @keyframes progress-animation {
+        0% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0.6;
+        }
+        100% {
+          opacity: 1;
+        }
+      }
+
+      .status-message {
+        margin-top: 15px;
+        padding: 12px;
+        border-radius: 8px;
+        display: none;
+        font-size: 14px;
+      }
+
+      .status-message.show {
+        display: block;
+      }
+
+      .status-message.info {
+        background: #e6f0ff;
+        color: #2c5282;
+        border-left: 4px solid #3182ce;
+      }
+
+      .status-message.success {
+        background: #c6f6d5;
+        color: #22543d;
+        border-left: 4px solid #38a169;
+      }
+
+      .status-message.error {
+        background: #fed7d7;
+        color: #742a2a;
+        border-left: 4px solid #e53e3e;
+      }
+
+      .status-message.warning {
+        background: #fef5e7;
+        color: #7c2d12;
+        border-left: 4px solid #f59e0b;
+      }
+
+      .results-box {
+        background: #f7fafc;
+        border-radius: 12px;
+        padding: 30px;
+        margin-top: 20px;
+        display: none;
+      }
+
+      .results-box.show {
+        display: block;
+      }
+
+      .stat-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 20px;
+        margin-top: 20px;
+      }
+
+      .stat-card {
+        background: white;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        border-left: 4px solid;
+      }
+
+      .stat-card.normal {
+        border-left-color: #48bb78;
+      }
+      .stat-card.warning {
+        border-left-color: #f59e0b;
+      }
+      .stat-card.danger {
+        border-left-color: #e53e3e;
+      }
+
+      .stat-label {
+        font-size: 12px;
+        color: #718096;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-bottom: 8px;
+      }
+
+      .stat-value {
+        font-size: 32px;
+        font-weight: bold;
+        color: #2c3e50;
+      }
+
+      .crisis-alert {
+        background: #fff5f5;
+        border: 2px solid #fc8181;
+        border-radius: 12px;
+        padding: 20px;
+        margin-top: 20px;
+        display: none;
+      }
+
+      .crisis-alert.show {
+        display: block;
+      }
+
+      .crisis-alert h3 {
+        color: #c53030;
+        margin-bottom: 15px;
+      }
+
+      .crisis-resources {
+        list-style: none;
+        padding: 0;
+      }
+
+      .crisis-resources li {
+        padding: 10px 0;
+        border-bottom: 1px solid #feb2b2;
+      }
+
+      .crisis-resources li:last-child {
+        border-bottom: none;
+      }
+
+      .footer {
+        background: #f7fafc;
+        padding: 20px;
+        text-align: center;
+        color: #718096;
+        font-size: 14px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <!-- Header -->
+      <div class="header">
+        <h1>🧠 PsyNLP</h1>
+        <p>Mental Health Text Analysis System</p>
+      </div>
+
+      <!-- Content -->
+      <div class="content">
+        <!-- File Upload Section -->
+        <div class="section">
+          <div class="section-title">📄 Upload Document</div>
+
+          <div class="upload-area" id="uploadArea">
+            <div class="upload-icon">📁</div>
+            <div class="upload-text">
+              Drop your file here or click to browse
+            </div>
+            <div class="upload-subtext">
+              Supported formats: .txt, .md, .docx (Max 16MB)
+            </div>
+            <input
+              type="file"
+              id="fileInput"
+              class="file-input"
+              accept=".txt,.md,.docx"
+            />
+          </div>
+
+          <div class="file-info" id="fileInfo">
+            <strong>✓ File loaded:</strong> <span id="fileName"></span> (<span
+              id="fileSize"
+            ></span
+            >)
+          </div>
+        </div>
+
+        <!-- Mode Selection -->
+        <div class="section">
+          <div class="section-title">⚙️ Analysis Mode</div>
+
+          <div class="mode-selection">
+            <label class="mode-option selected" data-mode="user">
+              <input type="radio" name="mode" value="user" checked />
+              <div class="mode-title">👤 User Mode</div>
+              <div class="mode-desc">
+                Get personalized recommendations and support resources
+              </div>
+            </label>
+
+            <label class="mode-option" data-mode="professional">
+              <input type="radio" name="mode" value="professional" />
+              <div class="mode-title">🏥 Professional Mode</div>
+              <div class="mode-desc">
+                DSM-5 considerations and clinical insights
+              </div>
+            </label>
+          </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="action-buttons">
+          <button class="btn btn-primary" id="analyzeBtn" disabled>
+            🔍 Analyze Text
+          </button>
+          <button class="btn btn-success" id="reportBtn" disabled>
+            📊 Generate Report
+          </button>
+        </div>
+
+        <!-- Progress Bar -->
+        <div class="progress-bar" id="progressBar">
+          <div class="progress-fill"></div>
+        </div>
+
+        <!-- Status Message -->
+        <div class="status-message" id="statusMessage"></div>
+
+        <!-- Crisis Alert -->
+        <div class="crisis-alert" id="crisisAlert">
+          <h3>⚠️ Crisis Support Available</h3>
+          <p>
+            High-risk indicators detected. If you or someone you know is in
+            crisis:
+          </p>
+          <ul class="crisis-resources">
+            <li>
+              <strong>988 Suicide & Crisis Lifeline:</strong> Call or text 988
+            </li>
+            <li><strong>Crisis Text Line:</strong> Text 'HELLO' to 741741</li>
+            <li><strong>SAMHSA National Helpline:</strong> 1-800-662-4357</li>
+            <li>
+              <strong>International:</strong>
+              <a href="https://findahelpline.com" target="_blank"
+                >findahelpline.com</a
+              >
+            </li>
+          </ul>
+        </div>
+
+        <!-- Results -->
+        <div class="results-box" id="resultsBox">
+          <h3>Analysis Results</h3>
+          <div class="stat-grid" id="statsGrid"></div>
+        </div>
+      </div>
+
+      <!-- Footer -->
+      <div class="footer">
+  <p>
+    <a href="https://github.com/HackingU0/PsyNLP">
+      PsyNLP Project | A Mental Health Text Analysis Tool
+    </a>
+  </p>
+  <p style="margin-top: 5px; font-size: 12px">
+    ⚠️ This tool cannot replace professional medical diagnosis.
+  </p>
+</div>
+
+
+    <script>
+      // Global variables
+      let uploadedFilename = null;
+      let currentMode = "user";
+      let resultId = null;
+
+      // DOM elements
+      const uploadArea = document.getElementById("uploadArea");
+      const fileInput = document.getElementById("fileInput");
+      const fileInfo = document.getElementById("fileInfo");
+      const fileName = document.getElementById("fileName");
+      const fileSize = document.getElementById("fileSize");
+      const analyzeBtn = document.getElementById("analyzeBtn");
+      const reportBtn = document.getElementById("reportBtn");
+      const progressBar = document.getElementById("progressBar");
+      const statusMessage = document.getElementById("statusMessage");
+      const crisisAlert = document.getElementById("crisisAlert");
+      const resultsBox = document.getElementById("resultsBox");
+      const statsGrid = document.getElementById("statsGrid");
+
+      // Mode selection
+      document.querySelectorAll(".mode-option").forEach((option) => {
+        option.addEventListener("click", function () {
+          document
+            .querySelectorAll(".mode-option")
+            .forEach((o) => o.classList.remove("selected"));
+          this.classList.add("selected");
+          this.querySelector('input[type="radio"]').checked = true;
+          currentMode = this.dataset.mode;
+        });
+      });
+
+      // Upload area click
+      uploadArea.addEventListener("click", () => fileInput.click());
+
+      // Prevent default drag behaviors
+      ["dragenter", "dragover", "dragleave", "drop"].forEach((eventName) => {
+        uploadArea.addEventListener(eventName, preventDefaults, false);
+        document.body.addEventListener(eventName, preventDefaults, false);
+      });
+
+      function preventDefaults(e) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
+
+      // Highlight on drag
+      ["dragenter", "dragover"].forEach((eventName) => {
+        uploadArea.addEventListener(eventName, () => {
+          uploadArea.classList.add("dragover");
+        });
+      });
+
+      ["dragleave", "drop"].forEach((eventName) => {
+        uploadArea.addEventListener(eventName, () => {
+          uploadArea.classList.remove("dragover");
+        });
+      });
+
+      // Handle drop
+      uploadArea.addEventListener("drop", handleDrop);
+
+      function handleDrop(e) {
+        const dt = e.dataTransfer;
+        const files = dt.files;
+        if (files.length > 0) {
+          handleFile(files[0]);
+        }
+      }
+
+      // File input change
+      fileInput.addEventListener("change", (e) => {
+        if (e.target.files.length > 0) {
+          handleFile(e.target.files[0]);
+        }
+      });
+
+      // Handle file upload
+      async function handleFile(file) {
+        const formData = new FormData();
+        formData.append("file", file);
+
+        showStatus("Uploading file...", "info");
+        progressBar.classList.add("show");
+
+        try {
+          const response = await fetch("/api/upload", {
+            method: "POST",
+            body: formData,
+          });
+
+          const data = await response.json();
+
+          if (data.success) {
+            uploadedFilename = data.filename;
+            fileName.textContent = data.original_name;
+            fileSize.textContent = formatBytes(data.size);
+            fileInfo.classList.add("show");
+            analyzeBtn.disabled = false;
+            showStatus("File uploaded successfully!", "success");
+          } else {
+            showStatus(data.error || "Upload failed", "error");
+          }
+        } catch (error) {
+          showStatus("Upload error: " + error.message, "error");
+        } finally {
+          progressBar.classList.remove("show");
+        }
+      }
+
+      // Analyze button
+      analyzeBtn.addEventListener("click", analyzeText);
+
+      async function analyzeText() {
+        if (!uploadedFilename) return;
+
+        analyzeBtn.disabled = true;
+        reportBtn.disabled = true;
+        resultsBox.classList.remove("show");
+        crisisAlert.classList.remove("show");
+        progressBar.classList.add("show");
+        showStatus("Analyzing text...", "info");
+
+        try {
+          const response = await fetch("/api/analyze", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              filename: uploadedFilename,
+              mode: currentMode,
+            }),
+          });
+
+          const data = await response.json();
+
+          if (data.success) {
+            resultId = data.result_id;
+            displayResults(data);
+            reportBtn.disabled = false;
+            showStatus("Analysis complete!", "success");
+
+            if (data.high_risk) {
+              crisisAlert.classList.add("show");
+            }
+          } else {
+            showStatus(data.error || "Analysis failed", "error");
+          }
+        } catch (error) {
+          showStatus("Analysis error: " + error.message, "error");
+        } finally {
+          progressBar.classList.remove("show");
+          analyzeBtn.disabled = false;
+        }
+      }
+
+      // Display results
+      function displayResults(data) {
+        const stats = data.stats;
+
+        statsGrid.innerHTML = `
+                <div class="stat-card ${getSeverityClass(
+                  stats.overall_severity_score
+                )}">
+                    <div class="stat-label">Overall Severity</div>
+                    <div class="stat-value">${
+                      stats.overall_severity_score
+                    }/10</div>
+                </div>
+                <div class="stat-card ${getSeverityClass(stats.max_severity)}">
+                    <div class="stat-label">Max Risk Level</div>
+                    <div class="stat-value">${stats.max_severity}/10</div>
+                </div>
+                <div class="stat-card ${
+                  stats.high_risk_sentences > 0 ? "danger" : "normal"
+                }">
+                    <div class="stat-label">High-Risk Sentences</div>
+                    <div class="stat-value">${stats.high_risk_sentences}</div>
+                </div>
+                <div class="stat-card normal">
+                    <div class="stat-label">Average Severity</div>
+                    <div class="stat-value">${stats.avg_severity}/10</div>
+                </div>
+            `;
+
+        resultsBox.classList.add("show");
+      }
+
+      function getSeverityClass(score) {
+        if (score >= 6) return "danger";
+        if (score >= 3) return "warning";
+        return "normal";
+      }
+
+      // Generate report button
+      reportBtn.addEventListener("click", generateReport);
+
+      async function generateReport() {
+        if (!resultId) return;
+
+        reportBtn.disabled = true;
+        showStatus("Generating report...", "info");
+        progressBar.classList.add("show");
+
+        try {
+          const response = await fetch(`/api/report/${resultId}`);
+          const data = await response.json();
+
+          if (data.success) {
+            showStatus("Report generated! Opening in new tab...", "success");
+            window.open(data.report_url, "_blank");
+          } else {
+            showStatus(data.error || "Report generation failed", "error");
+          }
+        } catch (error) {
+          showStatus("Report error: " + error.message, "error");
+        } finally {
+          progressBar.classList.remove("show");
+          reportBtn.disabled = false;
+        }
+      }
+
+      // Helper functions
+      function showStatus(message, type) {
+        statusMessage.textContent = message;
+        statusMessage.className = "status-message show " + type;
+      }
+
+      function formatBytes(bytes) {
+        if (bytes === 0) return "0 Bytes";
+        const k = 1024;
+        const sizes = ["Bytes", "KB", "MB"];
+        const i = Math.floor(Math.log(bytes) / Math.log(k));
+        return (
+          Math.round((bytes / Math.pow(k, i)) * 100) / 100 + " " + sizes[i]
+        );
+      }
+    </script>
+  </body>
+</html>
