@@ -1,3 +1,7 @@
+"""
+BERT Module
+Analyze sentence/article using fintuend bert models
+"""
 import torch
 from transformers import pipeline
 import pandas as pd
