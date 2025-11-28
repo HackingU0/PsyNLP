@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mental Health Analysis Report - {{ mode|title }} Mode</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: #f5f7fa;
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+
+        .header .meta {
+            opacity: 0.9;
+            font-size: 14px;
+        }
+
+        .mode-badge {
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            font-size: 12px;
+            margin-top: 10px;
+        }
+
+        .summary-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            padding: 30px;
+            background-color: #f8f9fa;
+        }
+
+        .card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+            border-left: 4px solid;
+        }
+
+        .card.normal {
+            border-left-color: #28a745;
+        }
+
+        .card.warning {
+            border-left-color: #ffc107;
+        }
+
+        .card.danger {
+            border-left-color: #dc3545;
+        }
+
+        .card-title {
+            font-size: 14px;
+            color: #6c757d;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .card-value {
+            font-size: 32px;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+
+        .card-subtitle {
+            font-size: 14px;
+            color: #95a5a6;
+            margin-top: 5px;
+        }
+
+        .section {
+            padding: 30px;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .section:last-child {
+            border-bottom: none;
+        }
+
+        .section-title {
+            font-size: 22px;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #667eea;
+        }
+
+        .warning-box {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 6px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        }
+
+        .warning-box h3 {
+            color: #856404;
+            margin-bottom: 15px;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .warning-item {
+            background: white;
+            padding: 12px;
+            margin: 8px 0;
+            border-radius: 4px;
+            border-left: 3px solid #ff9800;
+        }
+
+        .recommendation-box {
+            background: #e3f2fd;
+            border-left: 4px solid #2196F3;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 6px;
+            line-height: 1.8;
+        }
+
+        .resources-box {
+            background: #fff8e1;
+            border-left: 4px solid #ff9800;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 6px;
+        }
+
+        .resources-box h3 {
+            color: #f57c00;
+            margin-bottom: 15px;
+        }
+
+        .resources-box ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .resources-box li {
+            padding: 8px 0;
+            border-bottom: 1px solid #ffe0b2;
+        }
+
+        .resources-box li:last-child {
+            border-bottom: none;
+        }
+
+        .professional-box {
+            background: #f5f5f5;
+            border-left: 4px solid #607d8b;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 6px;
+        }
+
+        .professional-box h3 {
+            color: #455a64;
+            margin-bottom: 12px;
+            font-size: 16px;
+        }
+
+        .professional-box.risk-assessment {
+            background: #ffebee;
+            border-left-color: #d32f2f;
+        }
+
+        .professional-box.risk-assessment h3 {
+            color: #c62828;
+        }
+
+        .clinical-note {
+            background: #e8f5e9;
+            border: 1px solid #66bb6a;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 6px;
+            font-size: 13px;
+            color: #2e7d32;
+        }
+
+        .nlp-results {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .nlp-item {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 6px;
+        }
+
+        .nlp-item strong {
+            display: block;
+            color: #495057;
+            margin-bottom: 8px;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .distribution-chart {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .distribution-item {
+            flex: 1;
+            min-width: 120px;
+            text-align: center;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 6px;
+        }
+
+        .distribution-count {
+            font-size: 28px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .distribution-label {
+            font-size: 13px;
+            color: #6c757d;
+        }
+
+        .sentence-list {
+            margin-top: 20px;
+        }
+
+        .sentence-item {
+            margin-bottom: 20px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border-left: 4px solid;
+            transition: transform 0.2s;
+        }
+
+        .sentence-item:hover {
+            transform: translateX(5px);
+        }
+
+        .sentence-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .sentence-number {
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .sentence-text {
+            color: #2c3e50;
+            line-height: 1.8;
+            margin-bottom: 10px;
+        }
+
+        .sentence-meta {
+            display: flex;
+            gap: 15px;
+            font-size: 13px;
+        }
+
+        .severity-indicator {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 5px;
+        }
+
+        .risk-level {
+            display: inline-block;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .risk-low {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .risk-medium {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .risk-high {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .footer {
+            padding: 20px 30px;
+            background: #f8f9fa;
+            text-align: center;
+            color: #6c757d;
+            font-size: 13px;
+        }
+
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+
+            .container {
+                box-shadow: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>🧠 Mental Health Text Analysis Report</h1>
+            <div class="mode-badge">{% if mode == 'user' %}👤 USER MODE{% else %}🏥 PROFESSIONAL MODE{% endif %}</div>
+            <div class="meta">
+                Generated: {{ timestamp }} |
+                Sentences Analyzed: {{ sentence_count }} |
+                System Version: PsyNLP v1.0
+            </div>
+        </div>
+
+        <!-- Low Confidence Warning (if any) -->
+        {% if low_confidence_warnings %}
+        <div class="section">
+            <div class="warning-box">
+                <h3>
+                    <span style="font-size: 24px;">⚠️</span>
+                    Warning: Low Confidence
+                </h3>
+                <p>The following metrics have confidence below 50%, results may not be accurate:</p>
+                {% for warning in low_confidence_warnings %}
+                <div class="warning-item">
+                    <strong>{{ warning.metric }}:</strong> {{ warning.label }}
+                    (Confidence: {{ "%.2f"|format(warning.confidence * 100) }}%)
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- Summary Cards -->
+        <div class="summary-cards">
+            <div
+                class="card {% if stats.overall_severity_score >= 6 %}danger{% elif stats.overall_severity_score >= 3 %}warning{% else %}normal{% endif %}">
+                <div class="card-title">Overall Severity Score</div>
+                <div class="card-value">{{ stats.overall_severity_score }}/10</div>
+                <div class="card-subtitle">Comprehensive Assessment</div>
+            </div>
+
+            <div
+                class="card {% if stats.max_severity >= 6 %}danger{% elif stats.max_severity >= 3 %}warning{% else %}normal{% endif %}">
+                <div class="card-title">Maximum Risk Level</div>
+                <div class="card-value">{{ stats.max_severity }}/10</div>
+                <div class="card-subtitle">Most Severe Sentence Score</div>
+            </div>
+
+            <div class="card {% if stats.high_risk_sentences > 0 %}danger{% else %}normal{% endif %}">
+                <div class="card-title">High-Risk Sentences</div>
+                <div class="card-value">{{ stats.high_risk_sentences }}</div>
+                <div class="card-subtitle">Sentences with severity ≥ 6</div>
+            </div>
+
+            <div class="card normal">
+                <div class="card-title">Average Severity</div>
+                <div class="card-value">{{ stats.avg_severity }}/10</div>
+                <div class="card-subtitle">Document Average Level</div>
+            </div>
+        </div>
+
+        <!-- NLP Analysis Section -->
+        <div class="section">
+            <h2 class="section-title">📊 NLP Overall Analysis</h2>
+            <div class="nlp-results">
+                <div class="nlp-item">
+                    <strong>Emotion Analysis</strong>
+                    <span class="badge"
+                        style="background-color: {{ get_severity_color((nlp_analysis.emotion_score * 10)|int) }}; color: white;">
+                        {{ nlp_analysis.emotion_pred }}
+                    </span>
+                    <div style="margin-top: 10px;">
+                        Confidence: {{ "%.2f"|format(nlp_analysis.emotion_score * 100) }}%
+                        {% if nlp_analysis.emotion_score < 0.5 %} ⚠️{% endif %} </div>
+                    </div>
+
+                    <div class="nlp-item">
+                        <strong>Mental Health Classification</strong>
+                        <span class="badge"
+                            style="background-color: {{ get_severity_color((nlp_analysis.psy_score * 10)|int) }}; color: white;">
+                            {{ nlp_analysis.psy_pred }}
+                        </span>
+                        <div style="margin-top: 10px;">
+                            Confidence: {{ "%.2f"|format(nlp_analysis.psy_score * 100) }}%
+                            {% if nlp_analysis.psy_score < 0.5 %} ⚠️{% endif %} </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Mode-Specific Content -->
+                {% if mode == 'user' and recommendations_html %}
+                <!-- User Recommendations -->
+                <div class="section">
+                    <h2 class="section-title">💡 Personalized Recommendations</h2>
+                    <div class="recommendation-box">
+                        <div style="line-height: 1.8;">{{ recommendations_html|safe }}</div>
+                    </div>
+
+                    <div class="resources-box">
+                        <h3>🆘 Crisis Resources</h3>
+                        <ul>
+                            <li><strong>988 Suicide & Crisis Lifeline:</strong> Call or text 988</li>
+                            <li><strong>Crisis Text Line:</strong> Text 'HELLO' to 741741</li>
+                            <li><strong>SAMHSA National Helpline:</strong> 1-800-662-4357</li>
+                            <li><strong>International:</strong> <a href="https://findahelpline.com"
+                                    target="_blank">findahelpline.com</a></li>
+                        </ul>
+                    </div>
+                </div>
+                {% elif mode == 'professional' and professional_insights %}
+                <!-- Professional Insights -->
+                <div class="section">
+                    <h2 class="section-title">🏥 Clinical Assessment</h2>
+
+                    <div class="professional-box">
+                        <h3>📋 DSM-5 Diagnostic Considerations</h3>
+                        <div style="line-height: 1.8;">{{ professional_insights.dsm5_html|safe }}</div>
+                    </div>
+
+                    <div class="professional-box">
+                        <h3>💊 Treatment Recommendations</h3>
+                        <div style="line-height: 1.8;">{{ professional_insights.treatment_html|safe }}</div>
+                    </div>
+
+                    <div class="professional-box risk-assessment">
+                        <h3>⚠️ Risk Assessment</h3>
+                        <div style="line-height: 1.8;">{{ professional_insights.risk_html|safe }}</div>
+                    </div>
+
+                    <div class="clinical-note">
+                        <strong>Clinical Note:</strong> This analysis is a screening tool only.
+                        It should be used in conjunction with clinical interview, patient history,
+                        and professional judgment. Not a substitute for comprehensive psychiatric evaluation.
+                    </div>
+                </div>
+                {% endif %}
+
+                <!-- Severity Distribution -->
+                <div class="section">
+                    <h2 class="section-title">📈 Classification Distribution</h2>
+                    <div class="distribution-chart">
+                        {% for item in severity_distribution %}
+                        <div class="distribution-item">
+                            <div class="distribution-count" style="color: {{ item.color }};">
+                                {{ item.count }}
+                            </div>
+                            <div class="distribution-label">{{ item.name }}</div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div> <!-- Sentence Analysis -->
+                <div class="section">
+                    <h2 class="section-title">📝 Detailed Sentence Analysis</h2>
+                    <div class="sentence-list">
+                        {% for pred in llm_predictions %}
+                        <div class="sentence-item" style="border-left-color: {{ pred.color }};">
+                            <div class="sentence-header">
+                                <span class="sentence-number">Sentence #{{ loop.index }}</span>
+                                <span
+                                    class="risk-level {% if pred.severity_score >= 6 %}risk-high{% elif pred.severity_score >= 3 %}risk-medium{% else %}risk-low{% endif %}">
+                                    Severity: {{ pred.severity_score }}/10
+                                </span>
+                            </div>
+                            <div class="sentence-text">"{{ pred.sentence }}"</div>
+                            <div class="sentence-meta">
+                                <span>
+                                    <span class="severity-indicator" style="background-color: {{ pred.color }};"></span>
+                                    Classification: <strong>{{ pred.classification }}</strong>
+                                </span>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <!-- Footer -->
+                <div class="footer">
+                    <p>This report is automatically generated by PsyNLP System | © 2025 Mental Health Analysis Tool</p>
+                    <p style="margin-top: 5px; font-size: 12px;">
+                        ⚠️ {{ disclaimer }}
+                    </p>
+                </div>
+            </div>
+</body>
+
+</html>

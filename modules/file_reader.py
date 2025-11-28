@@ -5,26 +5,39 @@ Supports reading text from .md, .txt, and .docx files
 
 import os
 from pathlib import Path
+from io import BytesIO
 
 
-def read_markdown(file_path: str) -> str:
-    """Read markdown file"""
-    with open(file_path, "r", encoding="utf-8") as f:
-        return f.read()
+def read_markdown(file_path) -> str:
+    """Read markdown file - supports both path string and file-like object"""
+    if isinstance(file_path, str):
+        with open(file_path, "r", encoding="utf-8") as f:
+            return f.read()
+    else:
+        # Handle file-like object (e.g., Streamlit UploadedFile)
+        return file_path.read().decode("utf-8")
 
 
-def read_text(file_path: str) -> str:
-    """Read plain text file"""
-    with open(file_path, "r", encoding="utf-8") as f:
-        return f.read()
+def read_text(file_path) -> str:
+    """Read plain text file - supports both path string and file-like object"""
+    if isinstance(file_path, str):
+        with open(file_path, "r", encoding="utf-8") as f:
+            return f.read()
+    else:
+        # Handle file-like object
+        return file_path.read().decode("utf-8")
 
 
-def read_docx(file_path: str) -> str:
-    """Read DOCX file"""
+def read_docx(file_path) -> str:
+    """Read DOCX file - supports both path string and file-like object"""
     try:
         from docx import Document
 
-        doc = Document(file_path)
+        if isinstance(file_path, str):
+            doc = Document(file_path)
+        else:
+            doc = Document(BytesIO(file_path.read()))
+
         text = []
         for paragraph in doc.paragraphs:
             if paragraph.text.strip():
@@ -37,25 +50,20 @@ def read_docx(file_path: str) -> str:
         )
 
 
-def read_file(file_path: str) -> str:
+def read_file(file_path) -> str:
     """
     Read file based on extension
     Supports: .md, .txt, .docx
-
-    Args:
-        file_path: Path to the file
-
-    Returns:
-        File content as string
-
-    Raises:
-        ValueError: If file extension is not supported
-        FileNotFoundError: If file does not exist
+    Works with both file paths (str) and file-like objects (UploadedFile)
     """
-    if not os.path.exists(file_path):
-        raise FileNotFoundError(f"File not found: {file_path}")
-
-    ext = Path(file_path).suffix.lower()
+    # Get extension
+    if isinstance(file_path, str):
+        if not os.path.exists(file_path):
+            raise FileNotFoundError(f"File not found: {file_path}")
+        ext = Path(file_path).suffix.lower()
+    else:
+        # Handle file-like object (get name from object)
+        ext = Path(file_path.name).suffix.lower()
 
     if ext == ".md":
         return read_markdown(file_path)
@@ -69,7 +77,7 @@ def read_file(file_path: str) -> str:
         )
 
 
-def get_file_info(file_path: str) -> dict:
+def get_file_info(file_path) -> dict:
     """Get file information"""
     stat = os.stat(file_path)
     return {

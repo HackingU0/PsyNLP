@@ -189,4 +189,4 @@ PsyNLP.code-workspace
 uploads/*
 reports/*
 ._*
-learn.md
+nlp_models/*

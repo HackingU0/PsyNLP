@@ -1,0 +1,44 @@
+# Streamlit Configuration for PsyNLP
+
+[theme]
+# Primary color - used for interactive elements
+primaryColor="#667eea"
+
+# Background color
+backgroundColor="#ffffff"
+
+# Secondary background color - used for sidebar and other UI elements
+secondaryBackgroundColor="#f0f2f6"
+
+# Text color
+textColor="#262730"
+
+# Font family
+font="sans serif"
+
+[server]
+# Port to run the app on
+port = 8501
+
+# Enable CORS for development (disable in production)
+enableCORS = false
+
+# Enable XSRF protection
+enableXsrfProtection = true
+
+# Max upload size (in MB)
+maxUploadSize = 200
+
+# Server address
+headless = false
+
+[browser]
+# Automatically open browser on startup
+gatherUsageStats = false
+
+[runner]
+# Re-run on source file changes
+magicEnabled = true
+
+# Fast reruns
+fastReruns = true
