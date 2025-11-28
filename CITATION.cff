@@ -1,0 +1,20 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+type: software
+title: "PsyNLP: A NLP Program to Analyze Writings"
+authors:
+  - family-names: "Xiao"
+    given-names: "Zhiqi"
+    orcid: "https://orcid.org/0009-0004-5493-9977"
+version: "0.1.0"
+date-released: 2025-11-27
+license: GPL-3.0
+url: "https://github.com/HackingU0/PsyNLP"
+repository-code: "https://github.com/HackingU0/PsyNLP"
+doi: "10.5281/zenodo.17743985"
+keywords:
+  - NLP
+  - BERT
+  - psychology
+  - text analysis
+abstract: "A natural language processing program to analyze writings using BERT-based models for psychological text analysis."
