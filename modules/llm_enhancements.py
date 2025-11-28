@@ -3,9 +3,11 @@ LLM Enhancement Module
 Generates recommendations and professional insights
 """
 
-from modules.predict_llm import load_model
+from typing import Dict, cast
+
 from llama_cpp.llama_types import CreateChatCompletionResponse
-from typing import cast, Dict, List
+
+from modules.predict_llm import load_model
 
 
 def generate_user_recommendations(analysis_result: Dict) -> str:
@@ -25,23 +27,22 @@ def generate_user_recommendations(analysis_result: Dict) -> str:
 
     # Get main issues
     classifications = [pred["classification"] for pred in llm_predictions]
-    severity_scores = [pred["severity_score"] for pred in llm_predictions]
     max_severity = stats["max_severity"]
 
     # Create context for LLM
     context = f"""Based on mental health text analysis:
-- Overall severity: {stats['overall_severity_score']}/10
+- Overall severity: {stats["overall_severity_score"]}/10
 - Maximum severity: {max_severity}/10
-- Average severity: {stats['avg_severity']}/10
-- High-risk sentences: {stats['high_risk_sentences']}
-- Main issues detected: {', '.join(set(classifications))}
+- Average severity: {stats["avg_severity"]}/10
+- High-risk sentences: {stats["high_risk_sentences"]}
+- Main issues detected: {", ".join(set(classifications))}
 """
 
     response = llama.create_chat_completion(
         messages=[
             {
                 "role": "system",
-                "content": """You are a compassionate mental health support assistant. Provide warm, supportive, and actionable recommendations for someone experiencing mental health challenges. 
+                "content": """You are a compassionate mental health support assistant. Provide warm, supportive, and actionable recommendations for someone experiencing mental health challenges.
 
 Your recommendations should:
 1. Be empathetic and non-judgmental
@@ -92,11 +93,11 @@ def generate_professional_insights(analysis_result: Dict) -> Dict[str, str]:
     max_severity = stats["max_severity"]
 
     context = f"""Clinical Analysis Summary:
-- Overall severity: {stats['overall_severity_score']}/10
+- Overall severity: {stats["overall_severity_score"]}/10
 - Maximum severity: {max_severity}/10
-- Average severity: {stats['avg_severity']}/10
-- High-risk indicators: {stats['high_risk_sentences']} sentences
-- Classifications: {', '.join(set(classifications))}
+- Average severity: {stats["avg_severity"]}/10
+- High-risk indicators: {stats["high_risk_sentences"]} sentences
+- Classifications: {", ".join(set(classifications))}
 - High-risk content present: {"Yes" if high_risk_sentences else "No"}
 """
 
@@ -105,7 +106,7 @@ def generate_professional_insights(analysis_result: Dict) -> Dict[str, str]:
         messages=[
             {
                 "role": "system",
-                "content": """You are a clinical psychology expert. Provide brief DSM-5 diagnostic considerations based on text analysis. 
+                "content": """You are a clinical psychology expert. Provide brief DSM-5 diagnostic considerations based on text analysis.
 
 Format:
 - List 2-3 possible diagnostic categories

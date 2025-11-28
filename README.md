@@ -13,8 +13,24 @@ PsyNLP is a web-based application that analyzes text (articles, journals, notes)
 - **Severity Scoring**: Calculate overall severity scores for analyzed text
 - **LLM Enhancement**: Optional suicidal risk assessment using local LLMs
 - **HTML Reports**: Generate detailed visual reports with charts
-- **Web Interface**: User-friendly Flask web application
+- **Web Interface**: User-friendly Streamlit web application
 - **File Support**: Process `.txt`, `.md`, and `.docx` files
+
+## Deployment (Automated)
+
+If you have **Python 3.12** installed, you can use the automated deployment script:
+
+```bash
+python deploy.py
+```
+
+This script will handle dependencies installation and model downloading.
+
+After deployment, run the app with:
+
+```bash
+uv run streamlit run app.py
+```
 
 ## Installation (for non MacOS system)
 
@@ -31,10 +47,7 @@ cd PsyNLP
 pip install -r requirements.txt
 ```
 
-3. Download required models (they should be in `nlp_models/` directory, refer to [Guide](nlp_models/readme.md):
-   - bert-emotion
-   - deberta-illness
-   - GGUF models
+3. Download required models (They should be downloaded with deploy script)
 
 ## Installation (for macOS)
 
@@ -42,9 +55,9 @@ pip install -r requirements.txt
 xcode-select --install
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 git clone https://github.com/HackingU0/PsyNLP.git
+brew install python@3.12
 cd PsyNLP
-chmod +x setup_mac.sh
-./setup_mac.sh
+python deploy.py
 ```
 
 ## Usage
@@ -52,11 +65,10 @@ chmod +x setup_mac.sh
 1. Start the web application:
 
 ```bash
-source venv/bin/activate
-python web_app.py
+uv run streamlit run app.py
 ```
 
-2. Open your browser and navigate to `http://localhost:7860`
+2. The application should open automatically in your browser. If not, navigate to the URL shown in the terminal (usually `http://localhost:8501`).
 
 3. Upload a text file
 
@@ -77,7 +89,7 @@ PsyNLP/
 ├── templates/           # HTML templates
 ├── uploads/             # Uploaded files
 ├── reports/             # Generated reports
-└── web_app.py          # Main Flask application
+└── app.py              # Main Streamlit application
 ```
 
 ## Requirements
@@ -85,7 +97,7 @@ PsyNLP/
 - Python 3.12 (Does not support 3.13)
 - PyTorch
 - Transformers
-- Flask
+- Streamlit
 - spaCy
 - See `requirements.txt` for full list
 

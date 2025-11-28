@@ -1,12 +1,7 @@
-"""
-BERT Module
-Analyze sentence/article using fintuend bert models
-"""
 import torch
 from transformers import pipeline
-import pandas as pd
 
-# Select Device
+
 if torch.backends.mps.is_available():
     device = torch.device("mps")
 elif torch.cuda.is_available():
@@ -14,6 +9,15 @@ elif torch.cuda.is_available():
 else:
     device = torch.device("cpu")
 
+SEVERITY_SCORES = {
+    "Normal": 0,
+    "Stress": 2,
+    "Anxiety": 4,
+    "Depression": 6,
+    "Bipolar": 7,
+    "Personality disorder": 8,
+    "Suicidal": 10,
+}
 
 def sentiment_emotion(sentence):
     pipeline_emo = pipeline("text-classification", model="nlp_models/bert-emotion")
@@ -22,12 +26,12 @@ def sentiment_emotion(sentence):
 
 def sentiment_illness(sentence):
     pipeline_illness = pipeline(
-        "text-classification", model="nlp_models/deberta-illness"
+        "text-classification", model="nlp_models/deberta_illness"
     )
     return pipeline_illness(sentence)
 
 
-# Article-level Prediction (整体文章预测)
+# Article-level Prediction
 def predict_article(text: str):
     """
     Predict emotion and mental health for entire article
@@ -36,7 +40,7 @@ def predict_article(text: str):
     Returns:
         dict with emotion and psychological health predictions
     """
-    # Truncate text if too long (models have max token limits)
+    # Truncate text if too long
     max_length = 512
     if len(text) > max_length:
         text = text[:max_length]
@@ -47,8 +51,10 @@ def predict_article(text: str):
     return {
         "emotion_score": emotion_result[0]["score"],
         "emotion_pred": emotion_result[0]["label"],
+        "emotion_severity": SEVERITY_SCORES.get(emotion_result[0]["label"], 0),
         "psy_score": illness_result[0]["score"],
         "psy_pred": illness_result[0]["label"],
+        "psy_severity": SEVERITY_SCORES.get(illness_result[0]["label"], 0),
     }
 
 
@@ -66,7 +72,3 @@ def predict_sentences(sentences: list[str]):
         results.append(row)
     return results
 
-
-# Convert Predict Data to Pandas DataFrame
-def to_dataframe(results: list[dict]) -> pd.DataFrame:
-    return pd.DataFrame(results)
