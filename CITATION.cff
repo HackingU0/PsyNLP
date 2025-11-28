@@ -1,6 +1,6 @@
 cff-version: 1.2.0
 message: "If you use this software, please cite it as below."
-title: "PsyNLP: An NLP Program to Analyze Writings"
+title: "PsyNLP: A Psychology NLP Program to Analyze Writings"
 type: software
 authors:
   - family-names: Xiao
@@ -18,3 +18,8 @@ keywords:
   - psychology
   - text analysis
 abstract: "A natural language processing program to analyze writings using BERT-based models for psychological text analysis."
+contributors:
+  - family-names: Tang
+    given-names: Mingyi
+    orcid: "https://orcid.org/0009-0006-3208-3295"
+    role: "User tester"
