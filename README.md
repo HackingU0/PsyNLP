@@ -1,6 +1,6 @@
 # PsyNLP
 
-A mental health text analysis tool powered by NLP and LLM technologies.
+A Multi-Modal NLP System for Privacy-Preserving Mental Health Text Analysis
 
 ## Overview
 
