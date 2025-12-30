@@ -1,3 +1,4 @@
+--extra-index-url https://download.pytorch.org/whl/cpu
 annotated-types==0.7.0
 beautifulsoup4==4.14.2
 blinker==1.9.0
